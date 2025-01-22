@@ -1,41 +1,117 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>برنامه گزارش‌گیری</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>برنامه ریزی روزانه</title>
+    <style>
+        * { font-family: Tahoma, sans-serif; box-sizing: border-box; }
+        body { background: #eef2f3; margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: auto; }
+        .section { background: white; border-radius: 10px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h2 { color: #34495e; font-size: 20px; margin-bottom: 15px; display: flex; align-items: center; }
+        h2 span { margin-left: 10px; color: #27ae60; font-size: 24px; }
+        input, textarea, select { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; }
+        button { background: #3498db; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-size: 14px; }
+        button:hover { background: #2980b9; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        table, th, td { border: 1px solid #ddd; }
+        th, td { text-align: center; padding: 10px; }
+        th { background: #f8f9fa; }
+    </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <img src="logo.png" alt="Logo">
-            <h1>گزارش</h1>
-        </div>
+        <!-- نمایش تاریخ -->
         <div class="section">
-            <label for="dateFilter">فیلتر زمانی:</label>
-            <select id="dateFilter">
-                <option value="daily">روزانه</option>
-                <option value="weekly">هفتگی</option>
-                <option value="monthly">ماهانه</option>
-            </select>
+            <h2>📅 امروز: <span id="date"></span></h2>
         </div>
+
+        <!-- کار سخت -->
         <div class="section">
-            <textarea placeholder="توضیحات"></textarea>
+            <h2>🔥 کار سخت امروز</h2>
+            <input type="text" id="hardTaskTitle" placeholder="عنوان کار">
+            <textarea id="hardTaskSteps" placeholder="مراحل انجام کار" rows="4"></textarea>
+            <button onclick="addHardTask()">➕ افزودن</button>
         </div>
+
+        <!-- اولویت‌ها -->
         <div class="section">
-            <textarea placeholder="جزئیات"></textarea>
-            <textarea placeholder="نکات"></textarea>
+            <h2>✅ اولویت‌ها</h2>
+            <textarea id="priority1" placeholder="اولویت ۱" rows="2"></textarea>
+            <textarea id="priority2" placeholder="اولویت ۲" rows="2"></textarea>
+            <textarea id="priority3" placeholder="اولویت ۳" rows="2"></textarea>
+            <button onclick="savePriorities()">💾 ذخیره</button>
         </div>
+
+        <!-- تماس‌ها -->
         <div class="section">
-            <canvas id="myChart"></canvas>
+            <h2>📞 تماس‌ها</h2>
+            <input type="text" id="contactName" placeholder="نام فرد">
+            <input type="text" id="contactTopic" placeholder="موضوع">
+            <button onclick="addContact()">➕ افزودن</button>
+            <table id="contactsTable">
+                <thead>
+                    <tr>
+                        <th>نام</th>
+                        <th>موضوع</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
+
+        <!-- گزارش‌گیری -->
         <div class="section">
-            <button id="exportPDF">صادرات به PDF</button>
-            <button id="exportExcel">صادرات به Excel</button>
+            <h2>📊 گزارش‌گیری</h2>
+            <button onclick="generateReport()">📄 دریافت گزارش</button>
+            <pre id="report" style="background: #f4f6f7; padding: 15px; border-radius: 5px; margin-top: 10px; overflow-x: auto;"></pre>
         </div>
     </div>
-    <script src="scripts.js"></script>
+
+    <script>
+        // نمایش تاریخ امروز
+        const today = new Date().toLocaleDateString('fa-IR');
+        document.getElementById('date').textContent = today;
+
+        // ذخیره و نمایش کار سخت
+        function addHardTask() {
+            const title = document.getElementById('hardTaskTitle').value;
+            const steps = document.getElementById('hardTaskSteps').value;
+            alert(`کار سخت ذخیره شد:\nعنوان: ${title}\nمراحل: ${steps}`);
+        }
+
+        // ذخیره اولویت‌ها
+        function savePriorities() {
+            const priority1 = document.getElementById('priority1').value;
+            const priority2 = document.getElementById('priority2').value;
+            const priority3 = document.getElementById('priority3').value;
+            alert(`اولویت‌ها ذخیره شدند:\n۱. ${priority1}\n۲. ${priority2}\n۳. ${priority3}`);
+        }
+
+        // مدیریت تماس‌ها
+        function addContact() {
+            const name = document.getElementById('contactName').value;
+            const topic = document.getElementById('contactTopic').value;
+
+            if (name && topic) {
+                const table = document.getElementById('contactsTable').querySelector('tbody');
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${name}</td><td>${topic}</td>`;
+                table.appendChild(row);
+
+                document.getElementById('contactName').value = '';
+                document.getElementById('contactTopic').value = '';
+            } else {
+                alert('لطفاً تمامی فیلدها را پر کنید.');
+            }
+        }
+
+        // ایجاد گزارش
+        function generateReport() {
+            const report = `گزارش روزانه:\n\nکار سخت: ${document.getElementById('hardTaskTitle').value}\nمراحل: ${document.getElementById('hardTaskSteps').value}\n\nاولویت‌ها:\n۱. ${document.getElementById('priority1').value}\n۲. ${document.getElementById('priority2').value}\n۳. ${document.getElementById('priority3').value}`;
+            document.getElementById('report').textContent = report;
+        }
+    </script>
 </body>
 </html>
