@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>برنامه گزارش‌گیری</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="logo.png" alt="Logo">
+            <h1>گزارش</h1>
+        </div>
+        <div class="section">
+            <label for="dateFilter">فیلتر زمانی:</label>
+            <select id="dateFilter">
+                <option value="daily">روزانه</option>
+                <option value="weekly">هفتگی</option>
+                <option value="monthly">ماهانه</option>
+            </select>
+        </div>
+        <div class="section">
+            <textarea placeholder="توضیحات"></textarea>
+        </div>
+        <div class="section">
+            <textarea placeholder="جزئیات"></textarea>
+            <textarea placeholder="نکات"></textarea>
+        </div>
+        <div class="section">
+            <canvas id="myChart"></canvas>
+        </div>
+        <div class="section">
+            <button id="exportPDF">صادرات به PDF</button>
+            <button id="exportExcel">صادرات به Excel</button>
+        </div>
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>
